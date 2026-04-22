@@ -1,5 +1,6 @@
 import sys
 from git_commands import *
+from tools import *
 
 
 if len(sys.argv) <= 1:
@@ -13,14 +14,18 @@ else:
         else:
             init()
     elif command_name == "commit":
-        if len(sys.argv) != 3:
+        if not git_initialized():
+            print("Сначала нужно создать репозиторий командой init")
+        elif len(sys.argv) != 3:
             print("неверное использование команды commit")
         else:
             message = sys.argv[2]
             commit(message)
     elif command_name == "checkout":
-        if len(sys.argv) != 3:
-            print("неверное использование команды checkout")
+        if not git_initialized():
+            print("Сначала нужно создать репозиторий командой init")
+        elif len(sys.argv) != 3:
+            print("Неверное использование команды checkout")
         else:
             id = sys.argv[2]
             checkout(id)
