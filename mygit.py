@@ -3,6 +3,7 @@ from git_commands import *
 
 
 if len(sys.argv) <= 1:
+    print(sys.argv)
     print("Недостаточное количество аргументов")
 else:
     command_name = sys.argv[1]
