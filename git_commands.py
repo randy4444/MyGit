@@ -6,7 +6,7 @@ COMMIT_MESSAGE_NAME = ".hidden_message.txt"
 
 
 def init():
-    if not git_initialized():
+    if not os.path.exists(".mygitignore"):
         os.mkdir(".mygit")
         file = open(".mygitignore", "x", encoding="utf-8")
         file.close()
@@ -15,14 +15,14 @@ def init():
 
 def commit(message):
     if COMMIT_MESSAGE_NAME in os.listdir("."):
-        print(f"Запрщено созавать файл {COMMIT_MESSAGE_NAME} в директории '.'")
+        print(f"Запрщено создавать файл {COMMIT_MESSAGE_NAME} в директории '.'")
         return
 
     commit_id = get_last_commit_id() + 1
     commit_path = os.path.join(".mygit", str(commit_id))
     os.mkdir(commit_path)
-    meesage_path = os.path.join(commit_path, COMMIT_MESSAGE_NAME)
-    with open(meesage_path, "x", encoding="utf-8") as message_file:
+    message_path = os.path.join(commit_path, COMMIT_MESSAGE_NAME)
+    with open(message_path, "x", encoding="utf-8") as message_file:
         message_file.write(message)
 
     ignore = get_ignore()
@@ -51,11 +51,12 @@ def commit(message):
                 file_path = file
 
             if not should_ignore(file_path, ignore):
-                with open(file_path, "r", encoding="utf-8") as file:
-                    data = file.read()
+                print(file_path)
+                with open(file_path, "rb") as read_file:
+                    data = read_file.read()
 
                 save_path = os.path.join(commit_path, file_path)
-                with open(save_path, "a", encoding="utf-8") as save_file:
+                with open(save_path, "ab") as save_file:
                     save_file.write(data)
 
 
@@ -65,8 +66,8 @@ def checkout(id):
         print(f"Коммит с id = {id} не существует")
         return
     message_file_path = os.path.join(commit_path, COMMIT_MESSAGE_NAME)
-    with open(message_file_path, "r", encoding="utf-8") as message_file:
-        message = message_file.read()
+    with open(message_file_path, "rb") as message_file:
+        message = message_file.read().decode("utf-8")
 
     print(f"Коммит {id}. Сообщение: '{message}'")
     delete_current()
@@ -86,9 +87,9 @@ def checkout(id):
             else:
                 file_path = os.path.join(commit_path, file)
 
-            with open(file_path, "r", encoding="utf-8") as file:
+            with open(file_path, "rb") as file:
                 data = file.read() 
 
             save_path = os.path.relpath(file_path, commit_path)
-            with open(save_path, "x", encoding="utf-8") as save_file:
+            with open(save_path, "ab") as save_file:
                 save_file.write(data)
