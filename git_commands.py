@@ -2,6 +2,9 @@ import os
 from tools import *
 
 
+COMMIT_MESSAGE_NAME = ".hidden_message.txt"
+
+
 def init():
     if not git_initialized():
         os.mkdir(".mygit")
@@ -14,7 +17,7 @@ def commit(message):
     commit_id = get_last_commit_id() + 1
     commit_path = os.path.join(".mygit", str(commit_id))
     os.mkdir(commit_path)
-    meesage_path = os.path.join(commit_path, ".message.txt")
+    meesage_path = os.path.join(commit_path, COMMIT_MESSAGE_NAME)
     with open(meesage_path, "x", encoding="utf-8") as message_file:
         message_file.write(message)
 
@@ -69,6 +72,9 @@ def checkout(id):
             os.mkdir(current_rel_path)
         
         for file in files:
+            if file == COMMIT_MESSAGE_NAME:
+                continue
+
             if current != commit_path:
                 file_path = os.path.join(current, file)
             else:
@@ -78,6 +84,5 @@ def checkout(id):
                 data = file.read() 
 
             save_path = os.path.relpath(file_path, commit_path)
-            print(save_path, commit_path, file_path)
             with open(save_path, "x", encoding="utf-8") as save_file:
                 save_file.write(data)
