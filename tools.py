@@ -42,4 +42,4 @@ def should_ignore(path, ignore):
     
 
 def git_initialized():
-    return os.path.exists(".mygit") and os.path.exists(".mygitignore")
+    return os.path.exists(".mygit") and os.path.isdir(".mygit" ) and os.path.exists(".mygitignore") and os.path.isfile(".mygitignore")
