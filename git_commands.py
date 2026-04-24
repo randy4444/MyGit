@@ -14,6 +14,10 @@ def init():
         print("Репозиторий уже создан")
 
 def commit(message):
+    if COMMIT_MESSAGE_NAME in os.listdir("."):
+        print(f"Запрщено созавать файл {COMMIT_MESSAGE_NAME} в директории '.'")
+        return
+
     commit_id = get_last_commit_id() + 1
     commit_path = os.path.join(".mygit", str(commit_id))
     os.mkdir(commit_path)
@@ -24,7 +28,6 @@ def commit(message):
     ignore = get_ignore()
     for i in os.walk("."):
         current, dirs, files = i
-
         if should_ignore(current, ignore):
             dirs.clear()
             continue
@@ -48,9 +51,12 @@ def commit(message):
                 file_path = file
 
             if not should_ignore(file_path, ignore):
+                with open(file_path, "r", encoding="utf-8") as file:
+                    data = file.read()
+
                 save_path = os.path.join(commit_path, file_path)
-                f = open(save_path, "x", encoding="utf-8")
-                f.close()
+                with open(save_path, "a", encoding="utf-8") as save_file:
+                    save_file.write(data)
 
 
 def checkout(id):
@@ -58,11 +64,11 @@ def checkout(id):
     if not os.path.exists(commit_path):
         print(f"Коммит с id = {id} не существует")
         return
-    message_file_path = os.path.join(commit_path, ".message.txt")
+    message_file_path = os.path.join(commit_path, COMMIT_MESSAGE_NAME)
     with open(message_file_path, "r", encoding="utf-8") as message_file:
         message = message_file.read()
-        print(message)
 
+    print(f"Коммит {id}. Сообщение: '{message}'")
     delete_current()
     for i in os.walk(commit_path):
         current, dirs, files = i
