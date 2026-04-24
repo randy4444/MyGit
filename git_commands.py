@@ -51,4 +51,33 @@ def commit(message):
 
 
 def checkout(id):
-    pass
+    commit_path = os.path.join(".mygit", str(id))
+    if not os.path.exists(commit_path):
+        print(f"Коммит с id = {id} не существует")
+        return
+    message_file_path = os.path.join(commit_path, ".message.txt")
+    with open(message_file_path, "r", encoding="utf-8") as message_file:
+        message = message_file.read()
+        print(message)
+
+    delete_current()
+    for i in os.walk(commit_path):
+        current, dirs, files = i
+
+        if current != commit_path:
+            current_rel_path = os.path.relpath(current, commit_path)
+            os.mkdir(current_rel_path)
+        
+        for file in files:
+            if current != commit_path:
+                file_path = os.path.join(current, file)
+            else:
+                file_path = os.path.join(commit_path, file)
+
+            with open(file_path, "r", encoding="utf-8") as file:
+                data = file.read() 
+
+            save_path = os.path.relpath(file_path, commit_path)
+            print(save_path, commit_path, file_path)
+            with open(save_path, "x", encoding="utf-8") as save_file:
+                save_file.write(data)

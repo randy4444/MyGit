@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import shutil
 
 
 IGNORE = (".git", ".mygit", ".mygitignore", "mygit.py", ".gitignore", "git_commands.py", "tools.py")
@@ -24,6 +25,14 @@ def get_ignore():
 
     return ignore
 
+
+def delete_current():
+    for i in os.listdir("."):
+        if i not in IGNORE:
+            if os.path.isdir(i):
+                shutil.rmtree(i)
+            else:
+                os.remove(i)
 
 
 def should_ignore(path, ignore):

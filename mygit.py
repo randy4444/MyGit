@@ -4,9 +4,7 @@ from tools import *
 
 
 if len(sys.argv) <= 1:
-    print(sys.argv)
     print("Недостаточное количество аргументов")
-    should_ignore("faa")
 else:
     command_name = sys.argv[1]
     if command_name == "init":
@@ -29,6 +27,9 @@ else:
             print("Неверное использование команды checkout")
         else:
             id = sys.argv[2]
-            checkout(id)
+            if not id.isdigit():
+                print("Id должен быть числом")
+            else:
+                checkout(id)
     else:
         print(f"Неизвестная команда: '{command_name}'")
