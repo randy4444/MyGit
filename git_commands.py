@@ -7,6 +7,8 @@ def init():
         os.mkdir(".mygit")
         file = open(".mygitignore", "x", encoding="utf-8")
         file.close()
+    else:
+        print("Репозиторий уже создан")
 
 def commit(message):
     commit_id = get_last_commit_id() + 1
