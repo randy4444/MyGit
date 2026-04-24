@@ -6,6 +6,7 @@ from tools import *
 if len(sys.argv) <= 1:
     print(sys.argv)
     print("Недостаточное количество аргументов")
+    should_ignore("faa")
 else:
     command_name = sys.argv[1]
     if command_name == "init":
