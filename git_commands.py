@@ -6,16 +6,18 @@ COMMIT_MESSAGE_NAME = ".hidden_message.txt"
 
 
 def init():
-    if not os.path.exists(".mygitignore"):
-        os.mkdir(".mygit")
-        file = open(".mygitignore", "x", encoding="utf-8")
+    if not os.path.exists(".mygitignore") or not os.path.exists(".mygit"):
+        if not os.path.exists(".mygit"):
+            os.mkdir(".mygit")
+            
+        file = open(".mygitignore", "a", encoding="utf-8")
         file.close()
     else:
         print("Репозиторий уже создан")
 
 def commit(message):
     if COMMIT_MESSAGE_NAME in os.listdir("."):
-        print(f"Запрщено создавать файл {COMMIT_MESSAGE_NAME} в директории '.'")
+        print(f"Запрещено создавать файл {COMMIT_MESSAGE_NAME} в директории '.'")
         return
 
     commit_id = get_last_commit_id() + 1
