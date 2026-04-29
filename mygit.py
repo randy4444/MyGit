@@ -28,7 +28,7 @@ else:
         else:
             id = sys.argv[2]
             if not id.isdigit():
-                print("Id должен быть числом")
+                print("Id должен быть положительным числом")
             else:
                 checkout(id)
     else:
